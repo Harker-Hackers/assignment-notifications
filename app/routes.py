@@ -8,6 +8,9 @@ from app import app
 #more schoolopy
 from schoolopyInfo import schoolopyAuth, schoolopyUrl
 
+#mail
+from eMail import eMail
+
 #index
 @app.route('/', methods=["GET", "POST"])
 def index():
@@ -22,4 +25,18 @@ def home():
 #success
 @app.route('/authorized')
 def authorized():
+    if not schoolopyAuth.authorize():
+        return('hio')
+    sc = schoolopy.Schoology(schoolopyAuth)
+    print(sc.get_me())
     return 'Hey gunkers'
+
+#sending an email
+@app.route('/email')
+def sendEmail():
+    eml=eMail()
+    eml.recipients=["25aarushv@students.harker.org"]
+    eml.head="Hello"
+    eml.body="HELLOS"
+    eml.send()
+    return "success"
