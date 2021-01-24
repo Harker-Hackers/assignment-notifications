@@ -2,7 +2,7 @@
     "environments": {
         "env": {
             "HOME_URL": "http://localhost"
-        }
+        },
         "test": {
             "scripts": {
                 "test": "python3 app/__init__.py"
