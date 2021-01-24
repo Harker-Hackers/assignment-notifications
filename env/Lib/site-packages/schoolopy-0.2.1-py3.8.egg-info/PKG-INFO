@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: schoolopy
+Version: 0.2.1
+Summary: A Python wrapper for Schoology's API.
+Home-page: https://github.com/ErikBoesen/schoolopy
+Author: Erik Boesen
+Author-email: me@erikboesen.com
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN
