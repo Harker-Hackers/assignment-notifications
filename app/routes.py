@@ -30,7 +30,7 @@ def authorized():
     sc = schoolopy.Schoology(schoolopyAuth)
     print(sc.get_me())
     return 'Hey gunkers'
-
+'''
 #sending an email
 @app.route('/email')
 def sendEmail():
@@ -40,3 +40,4 @@ def sendEmail():
     eml.body="HELLOS"
     eml.send()
     return "success"
+'''
