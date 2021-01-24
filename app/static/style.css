@@ -1,0 +1,44 @@
+body {
+    background-color: lightgreen;
+}
+h1 {
+    color:navy;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-decoration: underline;
+}
+h2 {
+    color:navy;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+p {
+    color:navy;
+    font-size: 20px;
+    font-family: Verdana;
+}
+strong {
+    text-decoration: underline;
+    color:navy;
+    font-size: 20px;
+    font-family: Verdana;
+}
+input[type=text], select {
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+button {
+    width: 10%;
+    background-color: #eb3b3b;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

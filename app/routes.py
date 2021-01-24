@@ -29,7 +29,8 @@ def authorized():
         return('hio')
     sc = schoolopy.Schoology(schoolopyAuth)
     print(sc.get_me())
-    return 'Hey gunkers'
+    return render_template('authorized.html')
+
 '''
 #sending an email
 @app.route('/email')
