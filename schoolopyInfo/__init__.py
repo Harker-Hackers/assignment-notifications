@@ -9,5 +9,6 @@ authUrl="/authorized"
 
 #faking a request to get host
 with app.test_request_context("/"):
+    print(request.host)
     schoolopyUrl = schoolopyAuth.request_authorization().replace('https%3A%2F%2Fschoology.harker.org%2F', request.host+authUrl)
     
