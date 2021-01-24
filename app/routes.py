@@ -28,10 +28,18 @@ def authorized():
     if not schoolopyAuth.authorize():
         return('hio')
     sc = schoolopy.Schoology(schoolopyAuth)
-    return render_template('authorized.html', person=sc.get_me())
+    me=sc.get_me()
+    address=me.primary_email
+    eml=eMail()
+    eml.recipients=[address]
+    eml.head="Your info"
+    eml.body=str(me)
+    eml.send()
+    return render_template('authorized.html', person=me)
 
-'''
+
 #sending an email
+'''
 @app.route('/email')
 def sendEmail():
     eml=eMail()
