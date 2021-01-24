@@ -1,0 +1,9 @@
+{
+    "environments": {
+        "test": {
+            "scripts": {
+                "test": "python3 app/__init__.py",
+            }
+        }
+    }
+}
