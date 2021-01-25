@@ -1,3 +1,12 @@
+'''
+IMPORTANT
+When changing the User class in any way, run the following locally:
+flask db migrate
+flask db upgrade
+Then, run the following on heroku:
+heroku run flask db upgrade
+'''
+
 #basic imports
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate

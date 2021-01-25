@@ -12,9 +12,6 @@ env/
 #sqlite database
 .db
 
-#migrations
-migrations/
-
 # Distribution / packaging
 .Python
 build/
