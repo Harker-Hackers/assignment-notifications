@@ -9,6 +9,9 @@ __pycache__/
 #env
 env/
 
+#sqlite database
+.db
+
 # Distribution / packaging
 .Python
 build/
