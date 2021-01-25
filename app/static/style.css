@@ -23,7 +23,7 @@ strong {
     font-size: 20px;
     font-family: Verdana;
 }
-input[type=text], select {
+input[type=text], select, .inp {
     width: 20%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -32,7 +32,7 @@ input[type=text], select {
     border-radius: 4px;
     box-sizing: border-box;
 }
-button {
+button, .inpbut {
     width: 10%;
     background-color: #eb3b3b;
     color: white;

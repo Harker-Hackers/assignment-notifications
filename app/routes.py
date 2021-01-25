@@ -18,7 +18,7 @@ def index():
 
 #login
 @app.route('/login')
-def home():
+def login():
     print(schoolopyUrl)
     return redirect(schoolopyUrl)
 
@@ -29,14 +29,27 @@ def authorized():
         return('hio')
     sc = schoolopy.Schoology(schoolopyAuth)
     me=sc.get_me()
-    address=me.primary_email
-    eml=eMail()
-    eml.recipients=[address]
-    eml.head="Your info"
-    eml.body=str(me)
-    eml.send()
     return render_template('authorized.html', person=me)
 
+#getting course info
+@app.route("/set_courses")
+def set_courses():
+    if not schoolopyAuth.authorize():
+        return redirect(url_for('login'))
+    sc = schoolopy.Schoology(schoolopyAuth)
+    name = sc.get_me().username
+    data = request.args
+    i=1
+    while True:
+        try:
+            cName=data.get("n"+str(i))
+            cId=data.get("i"+str(i))
+            print(cName+":"+cId)
+            i+=1
+        except Exception as e:
+            print(e)
+            break
+    return "success"
 
 #sending an email
 '''

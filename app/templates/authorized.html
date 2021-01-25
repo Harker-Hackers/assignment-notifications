@@ -13,22 +13,34 @@ class's page's link.
 <img src="https://docs.google.com/drawings/d/e/2PACX-1vSW7OdM1i8Nlbk9H52dUyJukpX0ZyqYAAzK0LgR-woJ82JQ0qm3fl2Z7vSBlNqTrzJ-iS0VMXVI2dWP/pub?w=346&h=100">
 
 
-<form>
-    <input type="text" id="day" placeholder="Class name 1">
-    <input type="text" id="keyword" placeholder="Class ID">
-    <br>
-    <input type="text" id="day" placeholder="Class name 2">
-    <input type="text" id="keyword" placeholder="Class ID"><br>
-    <input type="text" id="day" placeholder="Class name 3">
-    <input type="text" id="keyword" placeholder="Class ID"><br>
-    <input type="text" id="day" placeholder="Class name 4">
-    <input type="text" id="keyword" placeholder="Class ID"><br>
-    <input type="text" id="day" placeholder="Class name 5">
-    <input type="text" id="keyword" placeholder="Class ID">
-    <br>
-    <button onclick="func()"> <!--func() will be a js function to say "woo hoo you authorized"-->
-        Submit
-    </button>
-    <hr>
-    
+<form action = '/set_courses' method='get' id="courseForm">
+	<div id="tHold">
+		<input type="text" id="n1" name="n1" placeholder="Class name 1">
+		<input type="text" id="i1" name="i1" placeholder="Class ID">
+	</div>
+	<input type="submit" class="inpbut" value="Submit">
 </form>
+<button value="Add Course" onClick=addCourse()>Add course</button>
+
+<script>
+var curNum=2;
+var form = document.getElementById("tHold");
+function addCourse(){
+	var br = document.createElement("br");
+	var nameInput=document.createElement("input");
+	nameInput.id="n"+String(curNum);
+	nameInput.name="n"+String(curNum);
+	nameInput.placeholder="Class name "+String(curNum);
+	nameInput.type="text";
+	nameInput.style["margin-right"]="5px";
+	var idInput=document.createElement("input");
+	idInput.id="i"+String(curNum);
+	idInput.name="i"+String(curNum);
+	idInput.placeholder="Class ID";
+	idInput.type="text";
+	form.appendChild(br);
+	form.appendChild(nameInput);
+	form.appendChild(idInput);
+	curNum+=1;
+}
+</script>
