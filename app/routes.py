@@ -2,7 +2,6 @@
 from flask import Flask, redirect, url_for, send_file, render_template, flash, request, abort, send_from_directory
 import schoolopy
 from datetime import datetime, timedelta
-import pytz
 
 #app instance + other important instances
 from app import app, db
