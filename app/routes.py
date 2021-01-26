@@ -1,6 +1,8 @@
 #basic modules for routes
 from flask import Flask, redirect, url_for, send_file, render_template, flash, request, abort, send_from_directory
 import schoolopy
+from datetime import datetime, timedelta
+import pytz
 
 #app instance + other important instances
 from app import app, db
@@ -124,11 +126,21 @@ def get_assignments():
     my_user=User.query.filter_by(username=name).first()
     crs=getUserCourse(my_user)
     retList=[]
-    for i in crs:
-        j=sc.get_events(section_id=i)
-        for k in j:
-            print(k.title)
-            retList.append(k.title)
+    for course in crs:
+        try:
+            assignments=sc.get_assignments(section_id=course)
+        except Exception:
+            assignments=[]
+        for assignment in assignments:
+            try:
+                due=assignment.due
+                due=datetime.strptime(due, "%Y-%m-%d %H:%M:%S")
+                now=datetime.now()#-timedelta(hours=8) #pst
+                print((due-now).days)
+                if (7>(due-now).days>-2):
+                    retList.append(assignment.title)
+            except Exception:
+                pass
     return str(retList)
 #sending an email
 '''
