@@ -21,7 +21,7 @@ from app.models import User, getUserCourse
 #index
 @app.route('/', methods=["GET", "POST"])
 def index():
-    return "add me to the hangout again i didn't get it"
+    return render_template('index.html')
 
 #login
 @app.route('/login')
