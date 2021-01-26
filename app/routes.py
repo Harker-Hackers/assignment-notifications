@@ -6,7 +6,8 @@ import schoolopy
 from app import app, db
 
 #more schoolopy
-from schoolopyInfo import schoolopyAuth, schoolopyUrl
+from schoolopyInfo import scAuth, authDict
+authDict=authDict()
 
 #mail
 from eMail import eMail
@@ -25,16 +26,17 @@ def index():
 #login
 @app.route('/login')
 def login():
-    return redirect(schoolopyUrl)
+    auth, authid=authDict.addTempAuth()
+    return redirect(auth.schoolopyUrl+"?aId="+str(authid))
 
 #success
 @app.route('/authorized')
 def authorized():
-    if not schoolopyAuth.authorize():
-        return redirect(url_for('login'))
-    sc = schoolopy.Schoology(schoolopyAuth)
+    tok=authDict.verifyAuth(request.args.get("aId"), request.args.get("oauth_token"))
+    sAuth=authDict.getAuth(tok)
+    sc = sAuth.sc
     me=sc.get_me()
-    name = sc.get_me().username
+    name=me.username
     my_user=User.query.filter_by(username=name)
     try:
         my_user=my_user.first()
@@ -45,15 +47,14 @@ def authorized():
         db.session.add(my_user)
         db.session.commit()
     if (request.args.get("man")=="t"):
-        return render_template('authorized.html', person=me)
-    return render_template('authorized2.html', person=me)
+        return render_template('authorized.html', person=me, tok=tok)
+    return render_template('authorized2.html', person=me, tok=tok)
 
 #getting course info
 @app.route("/set_courses")
 def set_courses():
-    if not schoolopyAuth.authorize():
-        return redirect(url_for('login'))
-    sc = schoolopy.Schoology(schoolopyAuth)
+    sAuth=authDict.getAuth(request.args.get("tok"))
+    sc = sAuth.sc
     name = sc.get_me().username
     k=1
     crs="["
@@ -82,9 +83,8 @@ def set_courses():
 
 @app.route("/get_courses", methods=["GET", "POST"])
 def get_courses():
-    if not schoolopyAuth.authorize():
-        return redirect(url_for('login'))
-    sc = schoolopy.Schoology(schoolopyAuth)
+    sAuth=authDict.getAuth(request.args.get("tok"))
+    sc = sAuth.sc
     name = sc.get_me().username
     pw=request.form["pw"]
     try:

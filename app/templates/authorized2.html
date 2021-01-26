@@ -10,7 +10,7 @@ You need to enter your password so we can quickly get the courses. We do not sto
 </p>
 <button onClick=red()>Manually import ID without password</button>
 <center>
-<form action = '/get_courses' method='post' id="passForm">
+<form action = '/get_courses?tok={{ tok }}' method='post' id="passForm">
 	<input type="text" id="pw" name="pw" placeholder="password">
 	<input type="submit" class="inpbut" value="Submit">
 </form>

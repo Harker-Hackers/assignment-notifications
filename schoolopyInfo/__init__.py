@@ -2,6 +2,45 @@ import schoolopy
 from os import getenv
 from flask import url_for, request
 from app import app
-schoolopyAuth = schoolopy.Auth(getenv('SCHOOLOGY_KEY'), getenv('SCHOOLOGY_SECRET'), three_legged=True, domain='https://schoology.harker.org/')
 host=getenv("HOME_URL")
-schoolopyUrl = schoolopyAuth.request_authorization().replace('https%3A%2F%2Fschoology.harker.org%2F', host+"/authorized")
+
+class scAuth:
+    def __init__(self):
+        self.schoolopyAuth = schoolopy.Auth(getenv('SCHOOLOGY_KEY'), getenv('SCHOOLOGY_SECRET'), three_legged=True, domain='https://schoology.harker.org/')
+        self.schoolopyUrl = self.schoolopyAuth.request_authorization().replace('https%3A%2F%2Fschoology.harker.org%2F', host+"/authorized")
+    def setSc(self):
+        if not self.schoolopyAuth.authorize():
+            return False
+        else:
+            self.sc=schoolopy.Schoology(self.schoolopyAuth)
+
+class authDict:
+    def __init__(self):
+        self.verAuth={}
+        self.fAuth={}
+        self.aId=0
+    def addTempAuth(self):
+        auth=scAuth()
+        self.fAuth[self.aId]=auth
+        self.aId+=1
+        print(self.fAuth)
+        return(auth,self.aId-1)
+    def verifyAuth(self,authId, tok):
+        authId=int(authId)
+        auth=self.fAuth[authId]
+        if not auth.schoolopyAuth.authorize():
+            return False
+        self.fAuth.pop(authId)
+        auth.setSc()
+        self.verAuth[tok]=auth
+        return tok
+    def getAuth(self,tok):
+        try:
+            return self.verAuth[tok]
+        except Exception as e:
+            print(e)
+            return 0
+    def clearAuth(self):
+        self.verAuth={}
+        self.fAuth={}
+        self.aId=0
