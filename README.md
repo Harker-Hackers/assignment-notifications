@@ -15,7 +15,7 @@
 **How to use the selenium addition**
 1. 
 ```python
-from selFunc import getCoruses
+from selFunc import getCourses
 getCourses("<username>", "<password>")
 ```
 2. This will return a list with the course ids
