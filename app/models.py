@@ -23,18 +23,8 @@ migrate=Migrate(app, db)
 class User(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(64),index=True,unique=True)
-    password=db.Column(db.String)
     discId=db.Column(db.Integer)
-    data = db.relationship('Course', backref='user', lazy='dynamic')
+    courses=db.Column(db.String)
     
     def __repr__(self):
         return '<User {}>'.format(self.username)
-
-class Course(db.Model):
-    id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String(140))
-    courseId=db.Column(db.Integer)
-    user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
-    
-    def __repr__(self):
-        return '<Course {}>'.format(self.name)
