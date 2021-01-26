@@ -23,7 +23,7 @@ strong {
     font-size: 20px;
     font-family: Verdana;
 }
-input[type=text], select, .inp {
+input[type=text], select, .inp, input[type=password] {
     width: 20%;
     padding: 12px 20px;
     margin: 8px 0;
