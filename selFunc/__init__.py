@@ -24,4 +24,4 @@ def getCourses(a,b):
     passw.send_keys(Keys.RETURN)
     data=driver.page_source
     result = re.findall("id=\"course-(.*?)\"",data)
-    print(result)
+    return(result)
