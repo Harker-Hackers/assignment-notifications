@@ -3,7 +3,7 @@ import eventlet
 eventlet.monkey_patch()
 
 #importing app
-from app import app, socketio
+from app import app, socketio, db, migrate
 
 
 #running app
