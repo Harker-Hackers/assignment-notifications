@@ -41,4 +41,5 @@ my_user=User.query.filter_by(username='Name').first()
 my_user.courses
 '''Update courses'''
 my_user.courses='NEW COURSES'
+db.session.commit()
 ```
