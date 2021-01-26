@@ -6,7 +6,7 @@
 
 <p>Hey {{ person['name_first_preferred'] }}. One more step is left to get email notifications.<br>
 
-You need to enter the classes you want to be nofitied of. Retrieve your class ID from the 
+You need to enter the ids of the classes you want to be nofitied of. Retrieve your class ID from the 
 class's page's link.
 </p>
 <center>
@@ -15,7 +15,6 @@ class's page's link.
 
 <form action = '/set_courses' method='get' id="courseForm">
 	<div id="tHold">
-		<input type="text" id="n1" name="n1" placeholder="Class name 1">
 		<input type="text" id="i1" name="i1" placeholder="Class ID">
 	</div>
 	<input type="submit" class="inpbut" value="Submit">
@@ -27,19 +26,12 @@ var curNum=2;
 var form = document.getElementById("tHold");
 function addCourse(){
 	var br = document.createElement("br");
-	var nameInput=document.createElement("input");
-	nameInput.id="n"+String(curNum);
-	nameInput.name="n"+String(curNum);
-	nameInput.placeholder="Class name "+String(curNum);
-	nameInput.type="text";
-	nameInput.style["margin-right"]="5px";
 	var idInput=document.createElement("input");
 	idInput.id="i"+String(curNum);
 	idInput.name="i"+String(curNum);
 	idInput.placeholder="Class ID";
 	idInput.type="text";
 	form.appendChild(br);
-	form.appendChild(nameInput);
 	form.appendChild(idInput);
 	curNum+=1;
 }

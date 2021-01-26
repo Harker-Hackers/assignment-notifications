@@ -28,3 +28,12 @@ class User(db.Model):
     
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+#get courses
+def getUserCourse(user):
+    crs=user.courses
+    crs=crs[2:-2]
+    crs=crs.replace("'", "")
+    crs=crs.split(",")
+    crs = [int(i) for i in crs]
+    return crs
