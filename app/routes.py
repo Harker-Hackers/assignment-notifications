@@ -78,7 +78,7 @@ def set_courses():
     user=User.query.filter_by(username=name).first()
     user.courses=str(crs)
     db.session.commit()
-    return crs
+    return str(crs)
 
 @app.route("/get_courses", methods=["GET", "POST"])
 def get_courses():
@@ -95,7 +95,7 @@ def get_courses():
     user=User.query.filter_by(username=name).first()
     user.courses=str(crs)
     db.session.commit()
-    return crs
+    return str(crs)
 #sending an email
 '''
 @app.route('/email')
