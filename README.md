@@ -1,7 +1,8 @@
-# harker-calendar-notifications
-Be notified on discord of upcoming assignments from Schoology. Made using [Schoology's REST API](https://developer.schoology.com/), the [Discord API](https://discord.com/developers/docs/intro), and (selenium)[https://selenium-python.readthedocs.io/].
-
-
+<p align="center"><img src="https://p11cdn4static.sharpschool.com/UserFiles/Servers/Server_141067/Image/sgy%20logo%20resized.png" width="80" legnth="80"></p>
+<h1 align="center">Schoology Calendar Notifications</h1>
+  <p align="center">Be notified on discord of upcoming assignments from Schoology.<br>
+  <sub>By <a href="https://github.com/goombamaui">Aarush Vailaya</a> and <a href="http://github.com/gadhagod">Aarav Borthakur</a>.</sub></p>
+  
 **How to use migrations**
 1. Install requirements with `pip3 install -r requirements.txt`.
 1. Make change to models.py.
