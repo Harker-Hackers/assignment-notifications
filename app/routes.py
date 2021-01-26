@@ -37,10 +37,12 @@ def authorized():
         sAuth=authDict.getAuth(tok)
     except Exception:
         tok=request.args.get("tok")
-        print(tok)
         sAuth=authDict.getAuth(tok)
-    sc = sAuth.sc
-    me=sc.get_me()
+    try:
+        sc = sAuth.sc
+        me=sc.get_me()
+    except Exception:
+        return render_template("404.html", error="Invalid Token")
     name=me.username
     my_user=User.query.filter_by(username=name)
     try:
@@ -59,8 +61,11 @@ def authorized():
 @app.route("/set_courses")
 def set_courses():
     sAuth=authDict.getAuth(request.args.get("tok"))
-    sc = sAuth.sc
-    name = sc.get_me().username
+    try:
+        sc = sAuth.sc
+        name = sc.get_me().username
+    except Exception:
+        return render_template("404.html", error="Invalid Token")
     k=1
     crs="["
     while True:
@@ -74,7 +79,7 @@ def set_courses():
             try:
                 cId=int(cId)
             except Exception:
-                return redirect(url_for("authorized"))
+                return render_template("404.html", error="Invalid course name")
             crs=crs+"'"+str(cId)+"', "
             k+=1
         except Exception:
@@ -89,14 +94,20 @@ def set_courses():
 @app.route("/get_courses", methods=["GET", "POST"])
 def get_courses():
     sAuth=authDict.getAuth(request.args.get("tok"))
-    sc = sAuth.sc
-    name = sc.get_me().username
+    try:
+        sc = sAuth.sc
+        name = sc.get_me().username
+    except Exception:
+        return render_template("404.html", error="Invalid Token")
     pw=request.form["pw"]
     try:
         crs=getCourses(name,pw)
-        crs[0]
+        try:
+            crs[0]
+        except Exception:
+            return render_template("Incorrect password")
     except Exception:
-        return redirect(url_for('get_courses'))
+        return render_template("404.html", error="Server couldn't get info")
     user=User.query.filter_by(username=name).first()
     user.courses=str(crs)
     db.session.commit()
