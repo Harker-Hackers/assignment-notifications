@@ -32,8 +32,13 @@ def login():
 #success
 @app.route('/authorized')
 def authorized():
-    tok=authDict.verifyAuth(request.args.get("aId"), request.args.get("oauth_token"))
-    sAuth=authDict.getAuth(tok)
+    try:
+        tok=authDict.verifyAuth(request.args.get("aId"), request.args.get("oauth_token"))
+        sAuth=authDict.getAuth(tok)
+    except Exception:
+        tok=request.args.get("tok")
+        print(tok)
+        sAuth=authDict.getAuth(tok)
     sc = sAuth.sc
     me=sc.get_me()
     name=me.username

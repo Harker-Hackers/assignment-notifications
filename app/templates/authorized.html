@@ -13,10 +13,11 @@ class's page's link.
 <img src="https://docs.google.com/drawings/d/e/2PACX-1vSW7OdM1i8Nlbk9H52dUyJukpX0ZyqYAAzK0LgR-woJ82JQ0qm3fl2Z7vSBlNqTrzJ-iS0VMXVI2dWP/pub?w=346&h=100">
 
 
-<form action = '/set_courses?tok={{ tok }}' method='get' id="courseForm">
+<form action = '/set_courses' method='get' id="courseForm">
 	<div id="tHold">
 		<input type="text" id="i1" name="i1" placeholder="Class ID">
 	</div>
+	<input type="hidden" name="tok" id="tok" value="{{ tok }}" />
 	<input type="submit" class="inpbut" value="Submit">
 </form>
 <button value="Add Course" onClick=addCourse()>Add course</button>
