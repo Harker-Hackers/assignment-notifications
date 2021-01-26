@@ -19,14 +19,13 @@ def index():
 #login
 @app.route('/login')
 def login():
-    print(schoolopyUrl)
     return redirect(schoolopyUrl)
 
 #success
 @app.route('/authorized')
 def authorized():
     if not schoolopyAuth.authorize():
-        return('hio')
+        return redirect(url_for('login'))
     sc = schoolopy.Schoology(schoolopyAuth)
     me=sc.get_me()
     return render_template('authorized.html', person=me)
@@ -46,8 +45,7 @@ def set_courses():
             cId=data.get("i"+str(i))
             print(cName+":"+cId)
             i+=1
-        except Exception as e:
-            print(e)
+        except Exception:
             break
     return "success"
 

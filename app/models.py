@@ -23,6 +23,7 @@ migrate=Migrate(app, db)
 class User(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(64),index=True,unique=True)
+    password=db.Column(db.String)
     discId=db.Column(db.Integer)
     data = db.relationship('Course', backref='user', lazy='dynamic')
     
