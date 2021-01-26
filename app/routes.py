@@ -89,7 +89,7 @@ def set_courses():
     user=User.query.filter_by(username=name).first()
     user.courses=str(crs)
     db.session.commit()
-    return str(crs)
+    return redirect(url_for("get_assignments", tok=request.args.get("tok")))
 
 @app.route("/get_courses", methods=["GET", "POST"])
 def get_courses():
@@ -98,20 +98,38 @@ def get_courses():
         sc = sAuth.sc
         name = sc.get_me().username
     except Exception:
-        return render_template("404.html", error="Invalid Token")
+        return "Bad tok"
     pw=request.form["pw"]
     try:
         crs=getCourses(name,pw)
         try:
             crs[0]
         except Exception:
-            return render_template("Incorrect password")
+            return "Bad pw"
     except Exception:
         return render_template("404.html", error="Server couldn't get info")
     user=User.query.filter_by(username=name).first()
     user.courses=str(crs)
     db.session.commit()
-    return str(crs)
+    return redirect(url_for("get_assignments", tok=request.args.get("tok")))
+
+@app.route("/assignments")
+def get_assignments():
+    sAuth=authDict.getAuth(request.args.get("tok"))
+    try:
+        sc = sAuth.sc
+        name = sc.get_me().username
+    except Exception:
+        return "bad"
+    my_user=User.query.filter_by(username=name).first()
+    crs=getUserCourse(my_user)
+    retList=[]
+    for i in crs:
+        j=sc.get_events(section_id=i)
+        for k in j:
+            print(k.title)
+            retList.append(k.title)
+    return str(retList)
 #sending an email
 '''
 @app.route('/email')

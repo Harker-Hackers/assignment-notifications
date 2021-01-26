@@ -1,5 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+import logging
+from selenium.webdriver.remote.remote_connection import LOGGER
+LOGGER.setLevel(logging.WARNING)
 import os
 import re
 
@@ -23,5 +26,5 @@ def getCourses(a,b):
     passw.send_keys(b)
     passw.send_keys(Keys.RETURN)
     data=driver.page_source
-    result = re.findall("id=\"course-(.*?)\"",data)
+    result = re.findall("id=\"section-(.*?)\"",data)
     return(result)
