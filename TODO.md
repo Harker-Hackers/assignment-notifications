@@ -1,2 +1,0 @@
-- Make a page for logged in users only. The authenticated url should link to this page. There will be a button to add courses (both ways) and a button to get the assignments.
-- Fix internal server error when "deny" is clicked on oauth page.
