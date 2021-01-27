@@ -193,14 +193,11 @@ def get_assignments():
             except Exception:
                 pass
     return str(retList)
-#sending an email
-'''
-@app.route('/email')
-def sendEmail():
-    eml=eMail()
-    eml.recipients=["25aarushv@students.harker.org"]
-    eml.head="Hello"
-    eml.body="HELLOS"
-    eml.send()
-    return "success"
-'''
+
+@app.errorhandler(500)
+def server_error(err):
+    return render_template('500.html')
+
+@app.errorhandler(404)
+def not_found_error(err):
+    return render_template('404.html')
