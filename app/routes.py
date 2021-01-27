@@ -27,6 +27,9 @@ from encrypter import encrypt_message, decrypt_message
 #limits
 from limiter import limiter
 
+#sending email
+from app.utils import sendEmail
+
 #index
 @app.route('/', methods=["GET", "POST"])
 def index():
@@ -217,7 +220,7 @@ def get_assignments():
 
 #using previous login
 #Much more secure
-verPassword=os.environ.get("TOKPASSWORD") or "blob"
+verPassword=os.environ.get("TOKPASSWORD") or "$2b$05$Nk304GWUdZHRtdbkua4uLuhgORsZYlMVMET9D0wFU6im7porTAEJK"
 verPassword=verPassword.encode()
 @app.route("/assignments_ver", methods=['GET','POST'])
 @limiter.limit("3/minute")
@@ -260,6 +263,23 @@ def get_assignments_ver():
     else:
         user=request.args.get("user")
         return render_template("get_assignments_ver.html", user=user)
+
+@app.route("/email_ver", methods=['GET','POST'])
+def email_ver():
+    if request.method=='POST':
+        try:
+            pw=request.values.get("pw")
+            if not bcrypt.checkpw(pw.encode(), verPassword):
+                raise Exception
+        except Exception as e:
+            print(e)
+            return "FAIL - Auth failed"
+        sendEmail()
+        return "success"
+        
+    else:
+        user=request.args.get("user")
+        return render_template("email_ver.html", user=user)
 
 @app.errorhandler(500)
 def server_error(err):
