@@ -2,12 +2,14 @@
 from flask import Flask, redirect, url_for, send_file, render_template, flash, request, abort, send_from_directory
 import schoolopy
 from datetime import datetime, timedelta
+import bcrypt
+import os
 
 #app instance + other important instances
 from app import app, db
 
 #more schoolopy
-from schoolopyInfo import scAuth, authDict
+from schoolopyInfo import scAuth, authDict, scAuthVer
 authDict=authDict()
 
 #mail
@@ -42,7 +44,6 @@ def authorized():
     try:
         sc = sAuth.sc
         me=sc.get_me()
-        print(sAuth.schoolopyAuth.access_token)
     except Exception:
         return render_template("404.html", error="Invalid Token")
     name=me.username
@@ -51,8 +52,13 @@ def authorized():
         my_user=my_user.first()
         if (my_user==None):
             raise Exception
+        my_user.token=sAuth.schoolopyAuth.access_token
+        my_user.token_secret=sAuth.schoolopyAuth.access_token_secret
+        db.session.commit()
     except Exception:
         my_user = User(username=name, discId=0,courses="")
+        my_user.token=sAuth.schoolopyAuth.access_token
+        my_user.token_secret=sAuth.schoolopyAuth.access_token_secret
         db.session.add(my_user)
         db.session.commit()
     return redirect(url_for("hub",tok=tok))
@@ -188,12 +194,56 @@ def get_assignments():
                 due=assignment.due
                 due=datetime.strptime(due, "%Y-%m-%d %H:%M:%S")
                 now=datetime.now()#-timedelta(hours=8) #pst
-                print((due-now).days)
                 if (7>(due-now).days>-2):
                     retList.append(assignment.title)
             except Exception:
                 pass
     return str(retList)
+
+#using previous login
+#Much more secure
+verPassword=os.environ.get("TOKPASSWORD") or "blob"
+verPassword=verPassword.encode()
+@app.route("/assignments_ver", methods=['GET','POST'])
+def get_assignments_ver():
+    if request.method=='POST':
+        try:
+            pw=request.values.get("pw")
+            if not bcrypt.checkpw(pw.encode(), verPassword):
+                raise Exception
+        except Exception:
+            return "FAIL - Auth failed"
+        try:
+            print(request.values.get("user"))
+            sAuth=scAuthVer(request.values.get("user"))
+        except Exception as e:
+            print(e)
+            return "FAIL - User doesn't exist"
+        if sAuth.setSc()==False:
+            return "FAIL - Tokens invalid"
+        sc=sAuth.sc
+        name=sc.get_me().username
+        my_user=User.query.filter_by(username=name).first()
+        crs=getUserCourse(my_user)
+        retList=[]
+        for course in crs:
+            try:
+                assignments=sc.get_assignments(section_id=course)
+            except Exception:
+                assignments=[]
+            for assignment in assignments:
+                try:
+                    due=assignment.due
+                    due=datetime.strptime(due, "%Y-%m-%d %H:%M:%S")
+                    now=datetime.now()#-timedelta(hours=8) #pst
+                    if (7>(due-now).days>-2):
+                        retList.append(assignment.title)
+                except Exception:
+                    pass
+        return str(retList)
+    else:
+        user=request.args.get("user")
+        return render_template("get_assignments_ver.html", user=user)
 
 @app.errorhandler(500)
 def server_error(err):

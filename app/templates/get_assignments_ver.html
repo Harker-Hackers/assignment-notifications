@@ -1,0 +1,18 @@
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+</head>
+
+<h1>Classes</h1>
+
+<p>Pw
+</p>
+<center>
+
+
+<form action = '{{ url_for("get_assignments_ver") }}' method='post' id="pwForm">
+	<input type="password" name="pw" id="pw" value="" />
+	<input type="hidden" name="user" id="user" value="{{ user }}" />
+	<input type="submit" class="inpbut" value="Submit">
+</form>
+
+<script>
