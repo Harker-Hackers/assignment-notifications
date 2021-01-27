@@ -26,7 +26,8 @@ def sendEmail():
                         retList.append(assignment.title)
                 except Exception:
                     pass
-        mail=eMail()
-        mail.body=str(retList)
-        mail.recipients=[sc.get_me().primary_email]
-        mail.send()
+        mymail=eMail()
+        mymail.body=str(retList)
+        mymail.recipients=[sc.get_me().primary_email]
+        print(mymail.recipients)
+        mymail.send()
