@@ -21,6 +21,9 @@ from selFunc import getCourses
 #models
 from app.models import User, getUserCourse
 
+#encrypting
+from encrypter import encrypt_message, decrypt_message
+
 #index
 @app.route('/', methods=["GET", "POST"])
 def index():
@@ -52,10 +55,11 @@ def authorized():
         my_user=my_user.first()
         if (my_user==None):
             raise Exception
-        my_user.token=sAuth.schoolopyAuth.access_token
-        my_user.token_secret=sAuth.schoolopyAuth.access_token_secret
+        my_user.token=encrypt_message(sAuth.schoolopyAuth.access_token)
+        my_user.token_secret=encrypt_message(sAuth.schoolopyAuth.access_token_secret)
         db.session.commit()
-    except Exception:
+    except Exception as e:
+        print(e)
         my_user = User(username=name, discId=0,courses="")
         my_user.token=sAuth.schoolopyAuth.access_token
         my_user.token_secret=sAuth.schoolopyAuth.access_token_secret
