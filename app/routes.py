@@ -42,6 +42,7 @@ def authorized():
     try:
         sc = sAuth.sc
         me=sc.get_me()
+        print(sAuth.schoolopyAuth.access_token)
     except Exception:
         return render_template("404.html", error="Invalid Token")
     name=me.username
