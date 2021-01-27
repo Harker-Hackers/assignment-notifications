@@ -24,6 +24,9 @@ from app.models import User, getUserCourse
 #encrypting
 from encrypter import encrypt_message, decrypt_message
 
+#limits
+from limiter import limiter
+
 #index
 @app.route('/', methods=["GET", "POST"])
 def index():
@@ -31,12 +34,14 @@ def index():
 
 #login
 @app.route('/login')
+@limiter.limit("3/minute")
 def login():
     auth, authid=authDict.addTempAuth()
     return redirect(auth.schoolopyUrl+"?aId="+str(authid))
 
 #success
 @app.route('/authorized')
+@limiter.limit("3/minute")
 def authorized():
     try:
         tok=authDict.verifyAuth(request.args.get("aId"), request.args.get("oauth_token"))
@@ -69,6 +74,7 @@ def authorized():
 
 #main hub
 @app.route("/hub")
+@limiter.limit("7/minute")
 def hub():
     tok=request.args.get("tok")
     sAuth=authDict.getAuth(tok)
@@ -93,6 +99,7 @@ def hub():
 
 #getting course
 @app.route("/get_courses")
+@limiter.limit("3/minute")
 def get_courses():
     tok=request.args.get("tok")
     sAuth=authDict.getAuth(tok)
@@ -105,6 +112,7 @@ def get_courses():
     
 #setting course
 @app.route("/set_courses")
+@limiter.limit("3/minute")
 def set_courses():
     tok=request.args.get("tok")
     sAuth=authDict.getAuth(tok)
@@ -124,6 +132,7 @@ def set_courses():
 
 #getting course info
 @app.route("/sccallback")
+@limiter.limit("3/minute")
 def set_courses_callback():
     sAuth=authDict.getAuth(request.args.get("tok"))
     try:
@@ -156,6 +165,7 @@ def set_courses_callback():
     return redirect(url_for("hub", tok=request.args.get("tok")))
 
 @app.route("/gccallback", methods=["GET", "POST"])
+@limiter.limit("3/minute")
 def get_courses_callback():
     sAuth=authDict.getAuth(request.args.get("tok"))
     try:
@@ -178,6 +188,7 @@ def get_courses_callback():
     return redirect(url_for("hub", tok=request.args.get("tok")))
 
 @app.route("/assignments")
+@limiter.limit("3/minute")
 def get_assignments():
     sAuth=authDict.getAuth(request.args.get("tok"))
     try:
@@ -209,6 +220,7 @@ def get_assignments():
 verPassword=os.environ.get("TOKPASSWORD") or "blob"
 verPassword=verPassword.encode()
 @app.route("/assignments_ver", methods=['GET','POST'])
+@limiter.limit("3/minute")
 def get_assignments_ver():
     if request.method=='POST':
         try:
