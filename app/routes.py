@@ -54,13 +54,66 @@ def authorized():
         my_user = User(username=name, discId=0,courses="")
         db.session.add(my_user)
         db.session.commit()
-    if (request.args.get("man")=="t"):
-        return render_template('authorized.html', person=me, tok=tok)
-    return render_template('authorized2.html', person=me, tok=tok)
+    return redirect(url_for("hub",tok=tok))
 
-#getting course info
+#main hub
+@app.route("/hub")
+def hub():
+    tok=request.args.get("tok")
+    sAuth=authDict.getAuth(tok)
+    try:
+        sc = sAuth.sc
+        me = sc.get_me()
+    except Exception:
+        return render_template("404.html", error="Invalid Token")
+    my_user=User.query.filter_by(username=me.username).first()
+    try:
+        crs=getUserCourse(my_user)
+        crsNames=[]
+        for i in crs:
+            try:
+                sec=sc.get_section(i).section_title
+                crsNames.append(sec)
+            except Exception:
+                continue
+    except Exception:
+        crsNames=[]
+    return render_template("hub.html", person=me, courses=crsNames, tok=tok)
+
+#getting course
+@app.route("/get_courses")
+def get_courses():
+    tok=request.args.get("tok")
+    sAuth=authDict.getAuth(tok)
+    try:
+        sc = sAuth.sc
+        me = sc.get_me()
+    except Exception:
+        return render_template("404.html", error="Invalid Token")
+    return render_template("authorized2.html", person=me, tok=tok)
+    
+#setting course
 @app.route("/set_courses")
 def set_courses():
+    tok=request.args.get("tok")
+    sAuth=authDict.getAuth(tok)
+    try:
+        sc = sAuth.sc
+        me = sc.get_me()
+        my_user = User.query.filter_by(username=me.username).first()
+    except Exception:
+        return render_template("404.html", error="Invalid Token")
+    try:
+        courses=getUserCourse(my_user)
+        courseNames=request.args.get("crs")
+    except Exception:
+        courses=""
+        courseNames=""
+    return render_template("authorized.html", person=me, tok=tok, courses=str(courses), courseNames=str(courseNames))
+
+#getting course info
+@app.route("/sccallback")
+def set_courses_callback():
     sAuth=authDict.getAuth(request.args.get("tok"))
     try:
         sc = sAuth.sc
@@ -70,7 +123,6 @@ def set_courses():
     k=1
     crs="["
     while True:
-        print("i"+str(k))
         try:
             cId=request.args.get("i"+str(k))
             if (cId==None):
@@ -90,10 +142,10 @@ def set_courses():
     user=User.query.filter_by(username=name).first()
     user.courses=str(crs)
     db.session.commit()
-    return redirect(url_for("get_assignments", tok=request.args.get("tok")))
+    return redirect(url_for("hub", tok=request.args.get("tok")))
 
-@app.route("/get_courses", methods=["GET", "POST"])
-def get_courses():
+@app.route("/gccallback", methods=["GET", "POST"])
+def get_courses_callback():
     sAuth=authDict.getAuth(request.args.get("tok"))
     try:
         sc = sAuth.sc
@@ -112,7 +164,7 @@ def get_courses():
     user=User.query.filter_by(username=name).first()
     user.courses=str(crs)
     db.session.commit()
-    return redirect(url_for("get_assignments", tok=request.args.get("tok")))
+    return redirect(url_for("hub", tok=request.args.get("tok")))
 
 @app.route("/assignments")
 def get_assignments():

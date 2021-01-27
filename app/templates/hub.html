@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>{{ person.name_first_preferred }}'s hub</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Schoology Calendar Notifications" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="/" />
+<meta property="og:site_name" content="Schoology Calendar Notifications" />
+<script type="application/ld+json">
+{"@type":"WebSite","headline":"Harker Schoology Notifications","url":"/","name":"Schoology Calendar Notifications","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="{{ url_for('static',filename='index.css') }}">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Schoology Calendar Notifications</h1>
+    </section>
+
+    <section class="main-content">
+		<div id="Courses">
+			<h3>Registered Courses</h3>
+			<ul id="courselist">
+				{% for i in courses %}
+					<li class="crsbull" style="list-style-type:disc;">{{ i }}</li>
+				{% endfor %}
+			</ul>
+			<a href="{{ url_for('get_courses', tok=tok) }}" class="btn2" style="border-color: rgb(10, 200, 220); background-color=rgb(10, 200, 220);">Set courses automatically</a>
+			<br>
+			<a href="{{ url_for('set_courses', tok=tok, crs = courses|join(',')) }}" class="btn2" style="border-color: rgb(10, 200, 220); background-color=rgb(10, 200, 220);">Set courses manually</a>
+			<br>
+			<a href="{{ url_for('get_assignments', tok=tok) }}" class="btn2" style="border-color: rgb(10, 200, 220); background-color=rgb(10, 200, 220);">Get assignments</a>
+		</div>
+	</section>
+</body>
+</html>

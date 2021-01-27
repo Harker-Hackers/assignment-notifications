@@ -13,9 +13,8 @@ class's page's link.
 <img src="https://docs.google.com/drawings/d/e/2PACX-1vSW7OdM1i8Nlbk9H52dUyJukpX0ZyqYAAzK0LgR-woJ82JQ0qm3fl2Z7vSBlNqTrzJ-iS0VMXVI2dWP/pub?w=346&h=100">
 
 
-<form action = '/set_courses' method='get' id="courseForm">
+<form action = '/sccallback' method='get' id="courseForm">
 	<div id="tHold">
-		<input type="text" id="i1" name="i1" placeholder="Class ID">
 	</div>
 	<input type="hidden" name="tok" id="tok" value="{{ tok }}" />
 	<input type="submit" class="inpbut" value="Submit">
@@ -23,17 +22,40 @@ class's page's link.
 <button value="Add Course" onClick=addCourse()>Add course</button>
 
 <script>
-var curNum=2;
+
+
+
+var curNum=1;
 var form = document.getElementById("tHold");
 function addCourse(){
 	var br = document.createElement("br");
 	var idInput=document.createElement("input");
+	var p=document.createElement("span");
 	idInput.id="i"+String(curNum);
 	idInput.name="i"+String(curNum);
 	idInput.placeholder="Class ID";
 	idInput.type="text";
-	form.appendChild(br);
+	form.append(br);
+	form.append(p);
 	form.appendChild(idInput);
 	curNum+=1;
+	return [idInput,p]
+}
+var courses = "{{ courses }}";
+var courseNames="{{ courseNames }}";
+courseNames=courseNames.split(",");
+console.log(courseNames);
+console.log(courses);
+courses=courses.slice(1,-1);
+courses=courses.replace("'", "");
+courses=courses.replace(" ", "");
+courses=courses.split(",");
+console.log(courses);
+for (i=0;i<courses.length;i++){
+	var k=addCourse()
+	var f=k[0];
+	var lab=k[1];
+	f.value=String(courses[i]);
+	lab.textContent=String(courseNames[i]);
 }
 </script>
