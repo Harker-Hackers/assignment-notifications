@@ -19,9 +19,10 @@ class scAuth:
 class scAuthVer:
     def __init__(self, user):
         my_user=User.query.filter_by(username=user).first()
-        request_token=decrypt_message(my_user.token)
-        request_token_secret=decrypt_message(my_user.token_secret)
-        self.schoolopyAuth=schoolopy.Auth(getenv('SCHOOLOGY_KEY'), getenv('SCHOOLOGY_SECRET'), domain='https://schoology.harker.org/', access_token=request_token, access_token_secret=request_token_secret) 
+        access_token=decrypt_message(my_user.token)
+        access_token_secret=decrypt_message(my_user.token_secret)
+        self.schoolopyAuth=schoolopy.Auth(getenv('SCHOOLOGY_KEY'), getenv('SCHOOLOGY_SECRET'), domain='https://schoology.harker.org/', access_token=access_token, access_token_secret=access_token_secret) 
+        self.schoolopyAuth.oauth.token = {'oauth_token': access_token, 'oauth_token_secret': access_token_secret}
         self.schoolopyUrl = self.schoolopyAuth.request_authorization(callback_url=host+'/authorized')
     def setSc(self):
         if not self.schoolopyAuth.authorize():

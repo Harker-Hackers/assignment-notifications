@@ -31,7 +31,6 @@ def sendEmail():
             mymail=eMail()
             mymail.msg.html=render_template("email.html", person=me, assignments=retList)
             mymail.recipients=[me.primary_email]
-            print(mymail.recipients)
             mymail.send()
         except Exception:
             pass

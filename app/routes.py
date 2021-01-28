@@ -271,8 +271,7 @@ def email_ver():
             pw=request.values.get("pw")
             if not bcrypt.checkpw(pw.encode(), verPassword):
                 raise Exception
-        except Exception as e:
-            print(e)
+        except Exception:
             return "FAIL - Auth failed"
         sendEmail()
         return "success"
