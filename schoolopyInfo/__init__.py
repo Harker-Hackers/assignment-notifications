@@ -58,15 +58,3 @@ class authDict:
         self.verAuth={}
         self.fAuth={}
         self.aId=0
-
-def check_for_existing_auth(self, request_token, request_token_secret):
-    try:
-        schoolopy.Auth(getenv('SCHOOLOGY_KEY'), getenv('SCHOOLOGY_SECRET'), domain='https://schoology.harker.org/', request_token=request_token, request_token_secret=request_token_secret) 
-        '''
-        Request tokenn is retrieved from `schoolopy.Auth.request_token_secret and request_token`.
-        After regulary authorizing with 3-legged, a class variable request_token_secret and request_token is
-        given. This is what we will store in the DB.
-        I'm not sure if we set three_legged to true of false though
-        '''
-    except:
-        pass

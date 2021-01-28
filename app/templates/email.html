@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static',filename='index.css') }}">
+	<style>
+.page-header {
+	background-color: rgb(30,180,210);
+	color: rgb(255,255,255);
+	text-align: center;
+}
+	</style>
+  </head>
+  <body>
+    <section class="page-header">
+	  <br>
+      <h1 class="project-name">Schoology Calendar Notifications</h1>
+	  <br>
+    </section>
+
+    <section class="course-content">
+	  <h2>Assignments</h2>
+	  <ol>
+		{% for i in assignments %}
+		  <li style="list-style-type:disc;">{{ i }} </li>
+		{% endfor %}
+	  </ol>
+	</section>
+</body>
+</html>

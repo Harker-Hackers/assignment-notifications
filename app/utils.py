@@ -2,32 +2,36 @@ from app.models import User, getUserCourse
 from eMail import eMail
 from schoolopyInfo import scAuth, authDict, scAuthVer
 from datetime import datetime
+from flask import render_template
 
 def sendEmail():
     for user in User.query.all():
-        sAuth=scAuthVer(user.username)
-        if sAuth.setSc()==False:
-            continue
-        sc=sAuth.sc
-        
-        crs=getUserCourse(user)
-        retList=[]
-        for course in crs:
-            try:
-                assignments=sc.get_assignments(section_id=course)
-            except Exception:
-                assignments=[]
-            for assignment in assignments:
+        try:
+            sAuth=scAuthVer(user.username)
+            if sAuth.setSc()==False:
+                continue
+            sc=sAuth.sc
+            me=sc.get_me()
+            crs=getUserCourse(user)
+            retList=[]
+            for course in crs:
                 try:
-                    due=assignment.due
-                    due=datetime.strptime(due, "%Y-%m-%d %H:%M:%S")
-                    now=datetime.now()#-timedelta(hours=8) #pst
-                    if (7>(due-now).days>-2):
-                        retList.append(assignment.title)
+                    assignments=sc.get_assignments(section_id=course)
                 except Exception:
-                    pass
-        mymail=eMail()
-        mymail.body=str(retList)
-        mymail.recipients=[sc.get_me().primary_email]
-        print(mymail.recipients)
-        mymail.send()
+                    assignments=[]
+                for assignment in assignments:
+                    try:
+                        due=assignment.due
+                        due=datetime.strptime(due, "%Y-%m-%d %H:%M:%S")
+                        now=datetime.now()#-timedelta(hours=8) #pst
+                        if (7>(due-now).days>-2):
+                            retList.append(assignment.title)
+                    except Exception:
+                        pass
+            mymail=eMail()
+            mymail.msg.html=render_template("email.html", person=me, assignments=retList)
+            mymail.recipients=[me.primary_email]
+            print(mymail.recipients)
+            mymail.send()
+        except Exception:
+            pass
