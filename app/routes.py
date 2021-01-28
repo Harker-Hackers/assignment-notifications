@@ -115,7 +115,7 @@ def get_courses():
     
 #setting course
 @app.route("/set_courses")
-@limiter.limit("3/minute")
+#@limiter.limit("3/minute")
 def set_courses():
     tok=request.args.get("tok")
     sAuth=authDict.getAuth(tok)

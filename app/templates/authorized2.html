@@ -1,19 +1,47 @@
-<head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
-</head>
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
 
-<h1>Classes</h1>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>{{ person.name_first_preferred }}'s hub</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Schoology Calendar Notifications" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="/" />
+<meta property="og:site_name" content="Schoology Calendar Notifications" />
+<script type="application/ld+json">
+{"@type":"WebSite","headline":"Harker Schoology Notifications","url":"/","name":"Schoology Calendar Notifications","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
 
-<p>Hey {{ person['name_first_preferred'] }}. One more step is left to get email notifications.<br>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="{{ url_for('static',filename='index.css') }}">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Schoology Calendar Notifications</h1>
+    </section>
 
-You need to enter your password so we can quickly get the courses. We do not store your password anywhere.
-</p>
-<button onClick=red()>Manually import ID without password</button>
-<center>
-<form action = '/gccallback?tok={{ tok }}' method='post' id="passForm">
-	<input type="password" id="pw" name="pw" class="inp" placeholder="password">
-	<input type="submit" class="inpbut" value="Submit">
-</form>
-<script>
-function red(){window.location.href ="/authorized?man=t&tok={{ tok }}"};
-</script>
+    <section class="main-content">
+		<div id="Courses">
+			<h1>Classes</h1>
+
+			<p>Hey {{ person['name_first_preferred'] }}. One more step is left to get email notifications.<br>
+
+			You need to enter your password so we can quickly get the courses. We do not store your password anywhere.<br>
+			</p>
+			<center>
+			<form action = '/gccallback?tok={{ tok }}' method='post' id="passForm">
+				<input type="password" id="pw" name="pw" placeholder="password" style="height:40px;width:245px;">
+				<input type="submit" class="inpbut" value="Submit" style="height:40px;">
+			</form>
+			<button onClick=red() style="margin-top:10px">Return to hub</button>
+			</center>
+		</div>
+	</section>
+	<script>
+	function red(){window.location.href ="{{ url_for('hub', tok=tok) }}"};
+	</script>
+</body>
+</html>

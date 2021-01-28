@@ -1,26 +1,51 @@
-<head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
-</head>
 
-<h1>Classes</h1>
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
 
-<p>Hey {{ person['name_first_preferred'] }}. One more step is left to get email notifications.<br>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Aarav Borthakur</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Schoology Calendar Notifications" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="/" />
+<meta property="og:site_name" content="Schoology Calendar Notifications" />
+<script type="application/ld+json">
+{"@type":"WebSite","headline":"Harker Schoology Notifications","url":"/","name":"Schoology Calendar Notifications","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
 
-You need to enter the ids of the classes you want to be nofitied of. Retrieve your class ID from the 
-class's page's link.
-</p>
-<center>
-<img src="https://docs.google.com/drawings/d/e/2PACX-1vSW7OdM1i8Nlbk9H52dUyJukpX0ZyqYAAzK0LgR-woJ82JQ0qm3fl2Z7vSBlNqTrzJ-iS0VMXVI2dWP/pub?w=346&h=100">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="{{ url_for('static',filename='index.css') }}">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Schoology Calendar Notifications</h1>
+    </section>
+
+    <section class="main-content">
+	
+	<h1>Classes</h1>
+
+	<p>Hey {{ person['name_first_preferred'] }}. One more step is left to get email notifications.<br>
+
+	You need to enter the ids of the classes you want to be nofitied of. Retrieve your class ID from the 
+	class's page's link.
+	</p>
+	<img src="https://docs.google.com/drawings/d/e/2PACX-1vSW7OdM1i8Nlbk9H52dUyJukpX0ZyqYAAzK0LgR-woJ82JQ0qm3fl2Z7vSBlNqTrzJ-iS0VMXVI2dWP/pub?w=346&h=100"
+	style="margin-bottom:-50px;">
 
 
-<form action = '/sccallback' method='get' id="courseForm">
-	<div id="tHold">
-	</div>
-	<input type="hidden" name="tok" id="tok" value="{{ tok }}" />
-	<input type="submit" class="inpbut" value="Submit">
-</form>
-<button value="Add Course" onClick=addCourse()>Add course</button>
-
+		<form action = '/sccallback' method='get' id="courseForm">
+			<div id="tHold">
+			</div>
+			<input type="hidden" name="tok" id="tok" value="{{ tok }}" />
+			<input type="submit" class="inpbut" value="Submit" style="margin-top:5px;">
+		</form>
+		<button value="Add Course" onClick=addCourse() style="margin-top:5px;">Add course</button>
+	</section>
+	
 <script>
 
 
@@ -31,31 +56,31 @@ function addCourse(){
 	var br = document.createElement("br");
 	var idInput=document.createElement("input");
 	var p=document.createElement("span");
+	p.style.marginLeft="10px";
+	idInput.style.marginTop="5px"
 	idInput.id="i"+String(curNum);
 	idInput.name="i"+String(curNum);
 	idInput.placeholder="Class ID";
 	idInput.type="text";
-	form.append(br);
-	form.append(p);
 	form.appendChild(idInput);
+	form.append(p);
+	form.append(br);
 	curNum+=1;
 	return [idInput,p]
 }
 var courses = "{{ courses }}";
 var courseNames="{{ courseNames }}";
 courseNames=courseNames.split(",");
-console.log(courseNames);
-console.log(courses);
 courses=courses.slice(1,-1);
 courses=courses.replace("'", "");
 courses=courses.replace(" ", "");
 courses=courses.split(",");
-console.log(courses);
 for (i=0;i<courses.length;i++){
 	var k=addCourse()
 	var f=k[0];
 	var lab=k[1];
-	f.value=String(courses[i]);
+	f.value=String(courses[i]).replace(" ","");
 	lab.textContent=String(courseNames[i]);
 }
 </script>
+
