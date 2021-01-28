@@ -44,3 +44,7 @@ my_user.courses
 my_user.courses='NEW COURSES'
 db.session.commit()
 ```
+**How to send email to all users**
+1. Go to /email_ver
+2. enter pw
+3. Email sent
