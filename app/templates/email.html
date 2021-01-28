@@ -19,11 +19,14 @@
 
     <section class="course-content">
 	  <h2>Assignments</h2>
-	  <ol>
 		{% for i in assignments %}
-		  <li style="list-style-type:disc;">{{ i }} </li>
+			<p>{{ i }}</p>
+			<ol>
+			{% for crs in assignments[i] %}
+				<li style="list-style-type:disc;">{{ crs }} </li>
+			{% endfor %}
+			</ol>
 		{% endfor %}
-	  </ol>
 	</section>
 </body>
 </html>

@@ -13,8 +13,10 @@ def sendEmail():
             sc=sAuth.sc
             me=sc.get_me()
             crs=getUserCourse(user)
-            retList=[]
+            retDict={}
             for course in crs:
+                retList=[]
+                sec=sc.get_section(course).section_title
                 try:
                     assignments=sc.get_assignments(section_id=course)
                 except Exception:
@@ -28,8 +30,11 @@ def sendEmail():
                             retList.append(assignment.title)
                     except Exception:
                         pass
+                if len(retList)>0:
+                    retDict[sec]=retList
             mymail=eMail()
-            mymail.msg.html=render_template("email.html", person=me, assignments=retList)
+            mymail.msg.html=render_template("email.html", person=me, assignments=retDict)
+            mymail.msg.subject="Courses for today"
             mymail.recipients=[me.primary_email]
             mymail.send()
         except Exception:
