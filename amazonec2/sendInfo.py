@@ -1,12 +1,3 @@
-'''\
-How to use:
-python email.py
-requierd config vars:
-    DB_URL=<database url>
-    TOKEN_ENCRYPT_KEY=key used to encrypt tokens (get from heroku config")
-    MAIL_PASSWORD=Password for the schoologycalender mail account
-'''
-
 import psycopg2
 import os
 
@@ -49,7 +40,6 @@ def sendEmailCourses(crsDict, rec, mailServer):
       <h1 class="project-name">Schoology Calendar Notifications</h1>
 	  <br>
     </section>
-
     <section class="course-content">
 	  <h2>Assignments</h2>
 		%s
@@ -116,17 +106,14 @@ def sendEmailUser(user, ms):
 
 def sendEmailAllUsers():
     DB_URL=os.popen("heroku config:get DATABASE_URL -a harker-schoology-notifications").read().replace("\n","")
-    print(DB_URL)
     conn=psycopg2.connect(DB_URL)
     cur=conn.cursor()
     cur.execute("SELECT * FROM \"user\";")
     
     #email
     mailServer=smtplib.SMTP_SSL("smtp.googlemail.com", 465)
-    print(os.environ.get("MAIL_PASSWORD"))
     mailServer.login(MAILSENDER, os.environ.get("MAIL_PASSWORD"))
     users=cur.fetchall()
-    print(users)
     for user in users:
         print(user[4],user[5])
         try:
@@ -135,8 +122,8 @@ def sendEmailAllUsers():
             print(e)
             continue
 
-sendEmailAllUsers()
-schedule.every().day.at("08:00").do(sendEmailAllUsers)
+#sendEmailAllUsers()
+schedule.every().day.at("16:00").do(sendEmailAllUsers)
 #schedule.every().minute.at(":0").do(job)
 while True:
     schedule.run_pending()
