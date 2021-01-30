@@ -116,7 +116,7 @@ def sendEmailUser(user, ms):
 
 def sendEmailAllUsers():
     try:
-        os.system("""DB_URL=$(heroku config:get DATABASE_URL -a harker-schoology-notifications)""")
+        os.system("""DATABASE_URL=$(heroku config:get DATABASE_URL -a harker-schoology-notifications)""")
     except Exception as e:
         print(e)
     DB_URL=os.environ.get("DATABASE_URL")
