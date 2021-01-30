@@ -69,8 +69,8 @@ def authorized():
     except Exception as e:
         print(e)
         my_user = User(username=name, discId=0,courses="")
-        my_user.token=sAuth.schoolopyAuth.access_token
-        my_user.token_secret=sAuth.schoolopyAuth.access_token_secret
+        my_user.token=encrypt_message(sAuth.schoolopyAuth.access_token)
+        my_user.token_secret=encrypt_message(sAuth.schoolopyAuth.access_token_secret)
         db.session.add(my_user)
         db.session.commit()
     return redirect(url_for("hub",tok=tok))

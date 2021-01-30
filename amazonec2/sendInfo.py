@@ -83,10 +83,12 @@ def getUserCourse(crs):
 def sendEmailUser(user, ms):
     access_token=decrypt_message(user[4])
     access_token_secret=decrypt_message(user[5])
+
     auth = schoolopy.Auth(os.getenv('SCHOOLOGY_KEY'), os.getenv('SCHOOLOGY_SECRET'), domain='https://schoology.harker.org/', access_token=access_token, access_token_secret=access_token_secret, three_legged=True) 
     auth.oauth.token = {'oauth_token': access_token, 'oauth_token_secret': access_token_secret}
     sc=schoolopy.Schoology(auth)
     me=sc.get_me()
+    print(me.username)
     crs=getUserCourse(user[3])
     retDict={}
     for course in crs:
@@ -128,12 +130,14 @@ def sendEmailAllUsers():
     mailServer.login(MAILSENDER, os.environ.get("MAIL_PASSWORD"))
     users=cur.fetchall()
     for user in users:
+        print(user[4],user[5])
         try:
             sendEmailUser(user, mailServer)
         except Exception as e:
             raise e
             continue
 
+sendEmailAllUsers()
 schedule.every().day.at("08:00").do(sendEmailAllUsers)
 while True:
     schedule.run_pending()
