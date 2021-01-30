@@ -2,15 +2,16 @@
 How to use:
 python email.py
 requierd config vars:
-    DATABASE_URL=<database url>
+    DB_URL=<database url>
     TOKEN_ENCRYPT_KEY=key used to encrypt tokens (get from heroku config")
     MAIL_PASSWORD=Password for the schoologycalender mail account
 '''
 
-
 import psycopg2
 import os
-import sys
+
+
+
 import schoolopy
 import os
 from cryptography.fernet import Fernet
@@ -18,16 +19,14 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
+import schedule
+import time
 
-DB_URI=os.environ.get("DATABASE_URL")
-MAILSENDER="schoologycalendar@gmail.com")
-
-#email
-mailServer=smtplib.SMTP_SSL("smtp.googlemail.com", 465)
-mailServer.login(MAILSENDER, os.environ.get("MAIL_PASSWORD"))
+DB_URL=os.environ.get("DATABASE_URL")
+MAILSENDER="schoologycalendar@gmail.com"
 
 
-def sendEmailCourses(crsDict, rec):
+def sendEmailCourses(crsDict, rec, mailServer):
     bString=""
     bText=""
     for course in crsDict:
@@ -82,13 +81,14 @@ def getUserCourse(crs):
     return crs
 
 
-def sendEmailUser(user):
+def sendEmailUser(user, ms):
     access_token=decrypt_message(user[4])
     access_token_secret=decrypt_message(user[5])
     auth = schoolopy.Auth(os.getenv('SCHOOLOGY_KEY'), os.getenv('SCHOOLOGY_SECRET'), domain='https://schoology.harker.org/', access_token=access_token, access_token_secret=access_token_secret, three_legged=True) 
     auth.oauth.token = {'oauth_token': access_token, 'oauth_token_secret': access_token_secret}
     sc=schoolopy.Schoology(auth)
     me=sc.get_me()
+    print(me)
     crs=getUserCourse(user[3])
     retDict={}
     for course in crs:
@@ -111,22 +111,33 @@ def sendEmailUser(user):
         if len(retList)>0:
             retDict[sec]=retList
     try:
-        sendEmailCourses(retDict, me.primary_email)
+        sendEmailCourses(retDict, me.primary_email,ms)
     except Exception as e:
         print(e)
 
 
-
-conn=psycopg2.connect(DB_URI)
-cur=conn.cursor()
-cur.execute("SELECT * FROM \"user\";")
-
-users=cur.fetchall()
-for user in users:
+def sendEmailAllUsers():
     try:
-        sendEmailUser(user)
+        os.system("""DB_URL=$(heroku config:get DATABASE_URL -a harker-schoology-notifications)""")
     except Exception as e:
-        raise e
-        continue
-    
-    
+        print(e)
+    conn=psycopg2.connect(DB_URL)
+    cur=conn.cursor()
+    cur.execute("SELECT * FROM \"user\";")
+
+    #email
+    mailServer=smtplib.SMTP_SSL("smtp.googlemail.com", 465)
+    mailServer.login(MAILSENDER, os.environ.get("MAIL_PASSWORD"))
+    users=cur.fetchall()
+    for user in users:
+        try:
+            sendEmailUser(user, mailServer)
+        except Exception as e:
+            raise e
+            continue
+
+schedule.every().day.at("08:00").do(sendEmailAllUsers)
+#sendEmailAllUsers()
+while True:
+    schedule.run_pending()
+    time.sleep(1)
