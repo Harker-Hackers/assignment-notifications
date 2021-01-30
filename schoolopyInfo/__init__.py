@@ -6,6 +6,9 @@ from app.models import User
 from encrypter import decrypt_message
 host=getenv("HOME_URL")
 
+if not (host=="localhost"):
+    host="https://"+host
+
 class scAuth:
     def __init__(self):
         self.schoolopyAuth = schoolopy.Auth(getenv('SCHOOLOGY_KEY'), getenv('SCHOOLOGY_SECRET'), three_legged=True, domain='https://schoology.harker.org/')
