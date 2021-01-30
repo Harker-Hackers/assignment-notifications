@@ -13,7 +13,6 @@ import os
 
 
 import schoolopy
-import os
 from cryptography.fernet import Fernet
 import smtplib
 from email.mime.text import MIMEText
@@ -124,21 +123,23 @@ def sendEmailAllUsers():
     conn=psycopg2.connect(DB_URL)
     cur=conn.cursor()
     cur.execute("SELECT * FROM \"user\";")
-
+    
     #email
     mailServer=smtplib.SMTP_SSL("smtp.googlemail.com", 465)
     mailServer.login(MAILSENDER, os.environ.get("MAIL_PASSWORD"))
     users=cur.fetchall()
+    print(users)
     for user in users:
         print(user[4],user[5])
         try:
             sendEmailUser(user, mailServer)
         except Exception as e:
-            raise e
+            print(e)
             continue
 
 sendEmailAllUsers()
-schedule.every().day.at("08:00").do(sendEmailAllUsers)
+#schedule.every().day.at("08:00").do(sendEmailAllUsers)
+schedule.every().minute.at(":0").do(job)
 while True:
     schedule.run_pending()
     time.sleep(1)
