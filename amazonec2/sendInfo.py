@@ -21,7 +21,6 @@ from datetime import datetime
 import schedule
 import time
 
-DB_URL=os.environ.get("DATABASE_URL")
 MAILSENDER="schoologycalendar@gmail.com"
 
 
@@ -120,6 +119,8 @@ def sendEmailAllUsers():
         os.system("""DB_URL=$(heroku config:get DATABASE_URL -a harker-schoology-notifications)""")
     except Exception as e:
         print(e)
+    DB_URL=os.environ.get("DATABASE_URL")
+    print(DB_URL)
     conn=psycopg2.connect(DB_URL)
     cur=conn.cursor()
     cur.execute("SELECT * FROM \"user\";")
