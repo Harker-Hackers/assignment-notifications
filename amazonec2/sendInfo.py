@@ -58,7 +58,6 @@ def sendEmailCourses(crsDict, rec, mailServer):
 	</section>
 </body>
 </html>""" % bString
-    print(bod)
     message = MIMEMultipart("alternative")
     message["Subject"] = "Courses for Today"
     message["From"] = MAILSENDER
@@ -88,7 +87,6 @@ def sendEmailUser(user, ms):
     auth.oauth.token = {'oauth_token': access_token, 'oauth_token_secret': access_token_secret}
     sc=schoolopy.Schoology(auth)
     me=sc.get_me()
-    print(me)
     crs=getUserCourse(user[3])
     retDict={}
     for course in crs:
@@ -137,7 +135,6 @@ def sendEmailAllUsers():
             continue
 
 schedule.every().day.at("08:00").do(sendEmailAllUsers)
-#sendEmailAllUsers()
 while True:
     schedule.run_pending()
     time.sleep(1)
