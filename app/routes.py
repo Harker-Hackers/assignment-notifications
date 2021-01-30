@@ -137,6 +137,7 @@ def set_courses():
 @app.route("/sccallback")
 @limiter.limit("3/minute")
 def set_courses_callback():
+    print(request.args)
     sAuth=authDict.getAuth(request.args.get("tok"))
     try:
         sc = sAuth.sc
@@ -152,6 +153,7 @@ def set_courses_callback():
                 crs=crs[0:-2]
                 crs=crs+"]"
                 break
+            
             try:
                 cId=int(cId)
             except Exception:

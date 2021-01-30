@@ -115,11 +115,7 @@ def sendEmailUser(user, ms):
 
 
 def sendEmailAllUsers():
-    try:
-        os.system("""export DATABASE_URL=$(heroku config:get DATABASE_URL -a harker-schoology-notifications)""")
-    except Exception as e:
-        print(e)
-    DB_URL=os.environ.get("DATABASE_URL")
+    DB_URL=os.popen("heroku config:get DATABASE_URL -a harker-schoology-notifications").read().replace("\n","")
     print(DB_URL)
     conn=psycopg2.connect(DB_URL)
     cur=conn.cursor()
@@ -127,6 +123,7 @@ def sendEmailAllUsers():
     
     #email
     mailServer=smtplib.SMTP_SSL("smtp.googlemail.com", 465)
+    print(os.environ.get("MAIL_PASSWORD"))
     mailServer.login(MAILSENDER, os.environ.get("MAIL_PASSWORD"))
     users=cur.fetchall()
     print(users)
