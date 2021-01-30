@@ -138,8 +138,8 @@ def sendEmailAllUsers():
             continue
 
 sendEmailAllUsers()
-#schedule.every().day.at("08:00").do(sendEmailAllUsers)
-schedule.every().minute.at(":0").do(job)
+schedule.every().day.at("08:00").do(sendEmailAllUsers)
+#schedule.every().minute.at(":0").do(job)
 while True:
     schedule.run_pending()
     time.sleep(1)
