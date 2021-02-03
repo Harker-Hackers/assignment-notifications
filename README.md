@@ -1,7 +1,6 @@
 <p align="center"><img src="https://p11cdn4static.sharpschool.com/UserFiles/Servers/Server_141067/Image/sgy%20logo%20resized.png" width="80" legnth="80"></p>
 <h1 align="center">Harker Calendar Notifications</h1>
   <p align="center">Be notified of upcoming assignments from Schoology every morning.<br>
-  <sub>By <a href="https://github.com/goombamaui">Aarush Vailaya</a> and <a href="http://github.com/gadhagod">Aarav Borthakur</a>.</sub></p>
   
 ## Usage
 Go to [http://harker-schoology-notifications.herokuapp.com/](http://harker-schoology-notifications.herokuapp.com/) and click "login". Aprove access. That's it! Now you will recieve an email every morning. You can explore the hub too.
